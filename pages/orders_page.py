@@ -31,7 +31,9 @@ class OrdersPage:
     logo_scooter = [By.CLASS_NAME, 'Header_LogoScooter__3lsAR']
     redirect_yandex_ru = 'https://dzen.ru/?yredirect=true'
     dzen_content_div = [By.CLASS_NAME, 'content']
-    order_text_pattern_1 = (r"Заказ оформлен\n")
+    order_text_pattern_1 = ('Заказ оформлен\n'
+    'Номер заказа: .  Запишите его:\n'
+    'пригодится, чтобы отслеживать статус')
 
     def __init__(self, driver):
         self.driver = driver
@@ -148,3 +150,5 @@ class OrdersPage:
     @allure.step('Получаем текущую ссылку')
     def current_url(self):
         return self.driver.current_url
+
+

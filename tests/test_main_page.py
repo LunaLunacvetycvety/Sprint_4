@@ -13,10 +13,11 @@ class TestMainPageFAQ:
         driver.get('https://qa-scooter.praktikum-services.ru/')
         main_page = MainPage(driver)
         main_page.click_popup_cookies()
-
-        main_page.click_accordion_heading_button_0()
-        main_page.wait_accordion_heading_button_0()
-        assert main_page.get_text_accordion_heading_0() == main_page.text_accordion_heading_0
+        text = main_page.get_accordion_text(
+            main_page.accordion__heading_button_0,
+            main_page.check_accordion__heading_button_0_text
+        )
+        assert text == main_page.text_accordion_heading_0
 
     @allure.title('Проверка второго выпадающего списка')
     @allure.description(
@@ -26,9 +27,11 @@ class TestMainPageFAQ:
         main_page = MainPage(driver)
         main_page.click_popup_cookies()
 
-        main_page.click_accordion_heading_button_1()
-        main_page.wait_accordion_heading_button_1()
-        assert main_page.get_text_accordion_heading_1() == main_page.text_accordion_heading_1
+        text = main_page.get_accordion_text(
+            main_page.accordion__heading_button_1,
+            main_page.check_accordion__heading_button_1_text
+        )
+        assert text == main_page.text_accordion_heading_1
 
     @allure.title('Проверка третьего выпадающего списка')
     @allure.description(
@@ -37,10 +40,11 @@ class TestMainPageFAQ:
         driver.get('https://qa-scooter.praktikum-services.ru/')
         main_page = MainPage(driver)
         main_page.click_popup_cookies()
-
-        main_page.click_accordion_heading_button_2()
-        main_page.wait_accordion_heading_button_2()
-        assert main_page.get_text_accordion_heading_2() == main_page.text_accordion_heading_2
+        text = main_page.get_accordion_text(
+            main_page.accordion__heading_button_2,
+            main_page.check_accordion__heading_button_2_text
+        )
+        assert text == main_page.text_accordion_heading_2
 
     @allure.title('Проверка четвертого выпадающего списка')
     @allure.description(
@@ -50,9 +54,11 @@ class TestMainPageFAQ:
         main_page = MainPage(driver)
         main_page.click_popup_cookies()
 
-        main_page.click_accordion_heading_button_3()
-        main_page.wait_accordion_heading_button_3()
-        assert main_page.get_text_accordion_heading_3() == main_page.text_accordion_heading_3
+        text = main_page.get_accordion_text(
+            main_page.accordion__heading_button_3,
+            main_page.check_accordion__heading_button_3_text
+        )
+        assert text == main_page.text_accordion_heading_3
 
     @allure.title('Проверка пятого выпадающего списка')
     @allure.description(
@@ -62,9 +68,11 @@ class TestMainPageFAQ:
         main_page = MainPage(driver)
         main_page.click_popup_cookies()
 
-        main_page.click_accordion_heading_button_4()
-        main_page.wait_accordion_heading_button_4()
-        assert main_page.get_text_accordion_heading_4() == main_page.text_accordion_heading_4
+        text = main_page.get_accordion_text(
+            main_page.accordion__heading_button_4,
+            main_page.check_accordion__heading_button_4_text
+        )
+        assert text == main_page.text_accordion_heading_4
 
     @allure.title('Проверка шестого выпадающего списка')
     @allure.description(
@@ -74,9 +82,11 @@ class TestMainPageFAQ:
         main_page = MainPage(driver)
         main_page.click_popup_cookies()
 
-        main_page.click_accordion_heading_button_5()
-        main_page.wait_accordion_heading_button_5()
-        assert main_page.get_text_accordion_heading_5() == main_page.text_accordion_heading_5
+        text = main_page.get_accordion_text(
+            main_page.accordion__heading_button_5,
+            main_page.check_accordion__heading_button_5_text
+        )
+        assert text == main_page.text_accordion_heading_5
 
     @allure.title('Проверка седьмого выпадающего списка')
     @allure.description(
@@ -86,9 +96,11 @@ class TestMainPageFAQ:
         main_page = MainPage(driver)
         main_page.click_popup_cookies()
 
-        main_page.click_accordion_heading_button_6()
-        main_page.wait_accordion_heading_button_6()
-        assert main_page.get_text_accordion_heading_6() == main_page.text_accordion_heading_6
+        text = main_page.get_accordion_text(
+            main_page.accordion__heading_button_6,
+            main_page.check_accordion__heading_button_6_text
+        )
+        assert text == main_page.text_accordion_heading_6
 
     @allure.title('Проверка восьмого выпадающего списка')
     @allure.description(
@@ -98,6 +110,8 @@ class TestMainPageFAQ:
         main_page = MainPage(driver)
         main_page.click_popup_cookies()
 
-        main_page.click_accordion_heading_button_7()
-        main_page.wait_accordion_heading_button_7()
-        assert main_page.get_text_accordion_heading_7() == main_page.text_accordion_heading_7
+        text = main_page.get_accordion_text(
+            main_page.accordion__heading_button_7,
+            main_page.check_accordion__heading_button_7_text
+        )
+        assert text == main_page.text_accordion_heading_7
