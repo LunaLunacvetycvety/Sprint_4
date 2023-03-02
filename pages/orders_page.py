@@ -1,3 +1,5 @@
+import re
+
 import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
@@ -9,31 +11,29 @@ class OrdersPage:
 
     pop_up_agreement_cookies = [By.ID, 'rcc-confirm-button']
     order_button_header = [By.CLASS_NAME, 'Button_Button__ra12g']
-    input_name = [By.XPATH, '//*[@id="root"]/div/div[2]/div[2]/div[1]/input']
-    input_surname = [By.XPATH, '//*[@id="root"]/div/div[2]/div[2]/div[2]/input']
-    input_address = [By.XPATH, '//*[@id="root"]/div/div[2]/div[2]/div[3]/input']
-    choose_station_metro = [By.CLASS_NAME, 'select-search__value']
-    station_metro = [By.XPATH, '//*[@id="root"]/div/div[2]/div[2]/div[4]/div/div[2]/ul/li[3]/button']
-    input_phone_number = [By.XPATH, '//*[@id="root"]/div/div[2]/div[2]/div[5]/input']
-    next_button = [By.XPATH, '//*[@id="root"]/div/div[2]/div[3]/button']
-    when_to_bring_scooter = [By.XPATH, '//*[@id="root"]/div/div[2]/div[2]/div[1]/div[1]/div/input']
-    input_when_to_bring_scooter = [By.XPATH,
-                                   '//*[@id="root"]/div/div[2]/div[2]/div[1]/div[2]/div[2]/div/div/div[2]/div[2]/div[3]/div[1]']
-    rental_period = [By.XPATH, '//*[@id="root"]/div/div[2]/div[2]/div[2]/div/div[1]']
-    input_rental_period = [By.XPATH, '//*[@id="root"]/div/div[2]/div[2]/div[2]/div[2]/div[2]']
+    input_name = [By.XPATH, "//input[@placeholder='* Имя']"]
+    input_surname = [By.XPATH, "//input[@placeholder='* Фамилия']"]
+    input_address = [By.XPATH, "//input[@placeholder='* Адрес: куда привезти заказ']"]
+    choose_station_metro = [By.XPATH, "//input[@placeholder='* Станция метро']"]
+    station_metro = [By.CLASS_NAME, "select-search__option"]
+    input_phone_number = [By.XPATH, "//input[@placeholder='* Телефон: на него позвонит курьер']"]
+    next_button = [By.XPATH, "//button[contains(text(),'Далее')]"]
+    when_to_bring_scooter = [By.XPATH, "//input[@placeholder='* Когда привезти самокат']"]
+    input_when_to_bring_scooter = [By.CLASS_NAME, 'react-datepicker__day--008']
+    rental_period = [By.CLASS_NAME, 'Dropdown-control']
+    input_rental_period = [By.CLASS_NAME, 'Dropdown-option']
     color_of_scooter = [By.XPATH, '//*[@id="black"]']
-    order_button = [By.XPATH, '//*[@id="root"]/div/div[2]/div[3]/button[2]']
-    yes_button = [By.XPATH, '//*[@id="root"]/div/div[2]/div[5]/div[2]/button[2]']
-    order_processed = [By.CLASS_NAME, 'Order_Modal__YZ-d3']
+    order_button = [By.XPATH, "//div[contains(@class, 'Order_Buttons')]//button[contains(text(),'Заказать')]"]
+    yes_button = [By.XPATH, "//div[contains(@class, 'Order_Buttons')]//button[contains(text(),'Да')]"]
+    order_processed = [By.XPATH, "//div[contains(@class, 'Order_Modal')]"]
     order_processed_text = [By.XPATH, '/html/body/div/div/div[2]/div[5]/div[1]']
-    order_button_not_header = [By.XPATH, '//*[@id="root"]/div/div/div[4]/div[2]/div[5]/button']
+    order_button_not_header = [By.XPATH,
+                               "//div[contains(@class, 'Home_FinishButton')]//button[contains(text(),'Заказать')]"]
     logo_yandex = [By.CLASS_NAME, 'Header_LogoYandex__3TSOI']
     logo_scooter = [By.CLASS_NAME, 'Header_LogoScooter__3lsAR']
     redirect_yandex_ru = 'https://dzen.ru/?yredirect=true'
     dzen_content_div = [By.CLASS_NAME, 'content']
-    order_text_pattern_1 = ('Заказ оформлен\n'
-    'Номер заказа: .  Запишите его:\n'
-    'пригодится, чтобы отслеживать статус')
+    order_text_pattern = re.compile("Заказ оформлен\nНомер заказа: \d?.  Запишите его:\nпригодится, чтобы отслеживать статус")
 
     def __init__(self, driver):
         self.driver = driver
@@ -41,10 +41,6 @@ class OrdersPage:
     @allure.step('Принимаем куки')
     def accept_cookie(self):
         self.driver.find_element(*self.pop_up_agreement_cookies).click()
-
-    @allure.step('Нажимаем кнопку "Заказать" в хедере ')
-    def click_order_button_header(self):
-        self.driver.find_element(*self.order_button_header).click()
 
     @allure.step('Нажимаем на поле ввода имени')
     def find_element_and_click_input_name(self):
@@ -122,8 +118,8 @@ class OrdersPage:
     def click_yes_button(self):
         self.driver.find_element(*self.yes_button).click()
 
-    @allure.step('Ждем баннер с оповещением об успешном заказе')
-    def wait_to_proceed_banner(self):
+    @allure.step('Ждем модалку с оповещением об успешном заказе')
+    def wait_to_proceed_modal(self):
         WebDriverWait(self.driver, 5).until(expected_conditions.visibility_of_element_located(self.order_processed))
 
     @allure.step('Нажимаем на логотип Яндекса')
@@ -138,10 +134,6 @@ class OrdersPage:
     def order_get_text(self):
         return self.driver.find_element(*self.order_processed_text).text
 
-    @allure.step('Нажимаем на кнопку "Заказать" в теле сайта')
-    def click_on_button_order(self):
-        self.driver.find_element(*self.order_button_not_header).click()
-
     @allure.step('Ждем загрузку дзена')
     def wait_to_open_dzen_window(self):
         WebDriverWait(self.driver, 20).until(
@@ -152,3 +144,33 @@ class OrdersPage:
         return self.driver.current_url
 
 
+    @allure.step('Выбираем кнопку для офррмления заказа')
+    def open(self, button):
+        self.accept_cookie()
+        self.driver.find_element(*button).click()
+
+    @allure.step('Заполняем информацию о клиенте для заказа')
+    def process_customer_page(self):
+        self.input_name_in()
+        self.find_element_and_click_input_name()
+        self.find_element_and_click_input_surname()
+        self.input_surname_in()
+        self.find_element_and_click_input_address()
+        self.input_address_in()
+        self.find_and_click_metro_station()
+        self.wait_before_choose_station()
+        self.click_on_metro_station()
+        self.find_and_click_phone_number()
+        self.input_phone_number_in()
+        self.click_next_button()
+
+    @allure.step('Заполняем информация об аренде для заказа')
+    def process_rent_page(self):
+        self.find_and_click_when_to_bring_scooter()
+        self.choose_when_to_bring_scooter()
+        self.find_and_click_rental_period()
+        self.choose_rental_period()
+        self.choose_color_of_scooter()
+        self.click_order_button()
+        self.click_yes_button()
+        self.wait_to_proceed_modal()

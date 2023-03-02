@@ -1,6 +1,7 @@
 import allure
 from selenium import webdriver
 from pages.orders_page import OrdersPage
+import re
 
 
 class TestHeaderOrder:
@@ -11,80 +12,45 @@ class TestHeaderOrder:
     def test_header_order(self, driver):
         driver.get('https://qa-scooter.praktikum-services.ru/')
         order_page = OrdersPage(driver)
-        order_page.accept_cookie()
-        order_page.click_on_button_order()
-        order_page.find_element_and_click_input_name()
-        order_page.input_name_in()
-        order_page.find_element_and_click_input_surname()
-        order_page.input_surname_in()
-        order_page.find_element_and_click_input_address()
-        order_page.input_address_in()
-        order_page.find_and_click_metro_station()
-        order_page.wait_before_choose_station()
-        order_page.click_on_metro_station()
-        order_page.find_and_click_phone_number()
-        order_page.input_phone_number_in()
-        order_page.click_next_button()
-        order_page.find_and_click_when_to_bring_scooter()
-        order_page.choose_when_to_bring_scooter()
-        order_page.find_and_click_rental_period()
-        order_page.choose_rental_period()
-        order_page.choose_color_of_scooter()
-        order_page.click_order_button()
-        order_page.click_yes_button()
-        order_page.wait_to_proceed_banner()
+        order_page.open(order_page.order_button_header)
+        order_page.process_customer_page()
+        order_page.process_rent_page()
 
-        assert order_page.order_text_pattern_1 == order_page.order_get_text()
+        text = order_page.order_get_text()
+        match = re.match(order_page.order_text_pattern, text)
+        assert match is not None
 
     @allure.title('Проверяем правильно оформленный заказ через кнопку "Заказать" в теле страницы')
     @allure.description('Последовательные выполнения действий для заказа самоката')
     def test_button_order(self, driver):
         driver.get('https://qa-scooter.praktikum-services.ru/')
         order_page = OrdersPage(driver)
-        order_page.accept_cookie()
-        order_page.click_on_button_order()
-        order_page.find_element_and_click_input_name()
-        order_page.input_name_in()
-        order_page.find_element_and_click_input_surname()
-        order_page.input_surname_in()
-        order_page.find_element_and_click_input_address()
-        order_page.input_address_in()
-        order_page.find_and_click_metro_station()
-        order_page.wait_before_choose_station()
-        order_page.click_on_metro_station()
-        order_page.find_and_click_phone_number()
-        order_page.input_phone_number_in()
-        order_page.click_next_button()
-        order_page.find_and_click_when_to_bring_scooter()
-        order_page.choose_when_to_bring_scooter()
-        order_page.find_and_click_rental_period()
-        order_page.choose_rental_period()
-        order_page.choose_color_of_scooter()
-        order_page.click_order_button()
-        order_page.click_yes_button()
-        order_page.wait_to_proceed_banner()
+        order_page.open(order_page.order_button_not_header)
+        order_page.process_customer_page()
+        order_page.process_rent_page()
 
-        assert order_page.order_text_pattern_1 == order_page.order_get_text()
+        text = order_page.order_get_text()
+        match = re.match(order_page.order_text_pattern, text)
+        assert match is not None
 
     @allure.title('Проверяем что при нажатии на логотип Яндекса открывается редирект')
     @allure.description('Последовательные выполнения действий для проверки открытия главной страницы Яндекса')
     def test_link_yandex_logo(self, driver):
         driver.get('https://qa-scooter.praktikum-services.ru/')
-        orders_page = OrdersPage(driver)
-        orders_page.accept_cookie()
-        orders_page.click_on_yandex_logo()
-        orders_page.driver.switch_to.window(orders_page.driver.window_handles[1])
-        orders_page.wait_to_open_dzen_window()
+        order_page = OrdersPage(driver)
+        order_page.accept_cookie()
+        order_page.click_on_yandex_logo()
+        order_page.driver.switch_to.window(order_page.driver.window_handles[1])
+        order_page.wait_to_open_dzen_window()
 
-        assert orders_page.current_url() == 'https://dzen.ru/?yredirect=true'
+        assert order_page.current_url() == 'https://dzen.ru/?yredirect=true'
 
     @allure.title('Проверяем что при нажатии на логотип Самоката, открывается главная страница Самоката')
     @allure.description('Последовательные выполнения действий для проверки открытия главной страницы Самоката')
     def test_link_scooter_logo(self, driver):
         driver.get('https://qa-scooter.praktikum-services.ru/')
-        orders_page = OrdersPage(driver)
-        orders_page.accept_cookie()
-        orders_page.click_on_button_order()
-        orders_page.click_on_logo_scooter()
+        order_page = OrdersPage(driver)
+        order_page.open(order_page.order_button_header)
+        order_page.click_on_logo_scooter()
 
-        assert orders_page.current_url() == 'https://qa-scooter.praktikum-services.ru/'
+        assert order_page.current_url() == 'https://qa-scooter.praktikum-services.ru/'
