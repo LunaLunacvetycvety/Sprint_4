@@ -1,7 +1,6 @@
 import allure
 from selenium import webdriver
 from pages.orders_page import OrdersPage
-import re
 
 
 class TestHeaderOrder:
@@ -12,26 +11,18 @@ class TestHeaderOrder:
     def test_header_order(self, driver):
         driver.get('https://qa-scooter.praktikum-services.ru/')
         order_page = OrdersPage(driver)
-        order_page.open(order_page.order_button_header)
-        order_page.process_customer_page()
-        order_page.process_rent_page()
+        order_page.checkout_process(order_page.order_button_header, 'Алина', 'Татьянчикова', 'Ломоносовский проспект 33', '79137284647')
 
-        text = order_page.order_get_text()
-        match = re.match(order_page.order_text_pattern, text)
-        assert match is not None
+        assert order_page.order_text_pattern == order_page.order_get_text()
 
     @allure.title('Проверяем правильно оформленный заказ через кнопку "Заказать" в теле страницы')
     @allure.description('Последовательные выполнения действий для заказа самоката')
     def test_button_order(self, driver):
         driver.get('https://qa-scooter.praktikum-services.ru/')
         order_page = OrdersPage(driver)
-        order_page.open(order_page.order_button_not_header)
-        order_page.process_customer_page()
-        order_page.process_rent_page()
+        order_page.checkout_process(order_page.order_button_not_header, 'Евгений', 'Татьянчиков', 'Ленинский проспект 44', '79036266152')
 
-        text = order_page.order_get_text()
-        match = re.match(order_page.order_text_pattern, text)
-        assert match is not None
+        assert order_page.order_text_pattern == order_page.order_get_text()
 
     @allure.title('Проверяем что при нажатии на логотип Яндекса открывается редирект')
     @allure.description('Последовательные выполнения действий для проверки открытия главной страницы Яндекса')

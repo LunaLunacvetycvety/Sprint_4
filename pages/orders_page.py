@@ -1,5 +1,3 @@
-import re
-
 import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
@@ -33,7 +31,7 @@ class OrdersPage:
     logo_scooter = [By.CLASS_NAME, 'Header_LogoScooter__3lsAR']
     redirect_yandex_ru = 'https://dzen.ru/?yredirect=true'
     dzen_content_div = [By.CLASS_NAME, 'content']
-    order_text_pattern = re.compile("Заказ оформлен\nНомер заказа: \d?.  Запишите его:\nпригодится, чтобы отслеживать статус")
+    order_text_pattern = 'Заказ оформлен\nНомер заказа: .  Запишите его:\nпригодится, чтобы отслеживать статус'
 
     def __init__(self, driver):
         self.driver = driver
@@ -41,86 +39,6 @@ class OrdersPage:
     @allure.step('Принимаем куки')
     def accept_cookie(self):
         self.driver.find_element(*self.pop_up_agreement_cookies).click()
-
-    @allure.step('Нажимаем на поле ввода имени')
-    def find_element_and_click_input_name(self):
-        self.driver.find_element(*self.input_name).click()
-
-    @allure.step('Вводим имя')
-    def input_name_in(self):
-        self.driver.find_element(*self.input_name).send_keys("Алина")
-
-    @allure.step('Нажимаем на поле ввода фамилии')
-    def find_element_and_click_input_surname(self):
-        self.driver.find_element(*self.input_surname).click()
-
-    @allure.step('Вводим фамилию')
-    def input_surname_in(self):
-        self.driver.find_element(*self.input_surname).send_keys("Татьянчикова")
-
-    @allure.step('Нажимаем на поле ввода адреса')
-    def find_element_and_click_input_address(self):
-        self.driver.find_element(*self.input_address).click()
-
-    @allure.step('Вводим адрес')
-    def input_address_in(self):
-        self.driver.find_element(*self.input_address).send_keys("Ломоносовский проспект 24")
-
-    @allure.step('Нажимаем на выбор метро')
-    def find_and_click_metro_station(self):
-        self.driver.find_element(*self.choose_station_metro).click()
-
-    @allure.step('Ждем отображение списка станций метро')
-    def wait_before_choose_station(self):
-        WebDriverWait(self.driver, 2).until(expected_conditions.visibility_of_element_located(self.station_metro))
-
-    @allure.step('Выбираем станцию метро')
-    def click_on_metro_station(self):
-        self.driver.find_element(*self.station_metro).click()
-
-    @allure.step('Нажимаем на поле ввода номера телефона')
-    def find_and_click_phone_number(self):
-        self.driver.find_element(*self.input_phone_number).click()
-
-    @allure.step('Вводим номер телефона')
-    def input_phone_number_in(self):
-        self.driver.find_element(*self.input_phone_number).send_keys("79137284647")
-
-    @allure.step('Нажимаем кнопку "Далее"')
-    def click_next_button(self):
-        self.driver.find_element(*self.next_button).click()
-
-    @allure.step('Нажимаем на выбор даты доставки')
-    def find_and_click_when_to_bring_scooter(self):
-        self.driver.find_element(*self.when_to_bring_scooter).click()
-
-    @allure.step('Выбираем дату доставки')
-    def choose_when_to_bring_scooter(self):
-        self.driver.find_element(*self.input_when_to_bring_scooter).click()
-
-    @allure.step('Нажимаем на выбор периода аренды')
-    def find_and_click_rental_period(self):
-        self.driver.find_element(*self.rental_period).click()
-
-    @allure.step('Выбираем период аренды')
-    def choose_rental_period(self):
-        self.driver.find_element(*self.input_rental_period).click()
-
-    @allure.step('Выбираем цвет самоката')
-    def choose_color_of_scooter(self):
-        self.driver.find_element(*self.color_of_scooter).click()
-
-    @allure.step('Нажимаем кнопку "Заказать"')
-    def click_order_button(self):
-        self.driver.find_element(*self.order_button).click()
-
-    @allure.step('Подтверждаем заказ')
-    def click_yes_button(self):
-        self.driver.find_element(*self.yes_button).click()
-
-    @allure.step('Ждем модалку с оповещением об успешном заказе')
-    def wait_to_proceed_modal(self):
-        WebDriverWait(self.driver, 5).until(expected_conditions.visibility_of_element_located(self.order_processed))
 
     @allure.step('Нажимаем на логотип Яндекса')
     def click_on_yandex_logo(self):
@@ -143,34 +61,33 @@ class OrdersPage:
     def current_url(self):
         return self.driver.current_url
 
-
     @allure.step('Выбираем кнопку для офррмления заказа')
     def open(self, button):
         self.accept_cookie()
         self.driver.find_element(*button).click()
 
-    @allure.step('Заполняем информацию о клиенте для заказа')
-    def process_customer_page(self):
-        self.input_name_in()
-        self.find_element_and_click_input_name()
-        self.find_element_and_click_input_surname()
-        self.input_surname_in()
-        self.find_element_and_click_input_address()
-        self.input_address_in()
-        self.find_and_click_metro_station()
-        self.wait_before_choose_station()
-        self.click_on_metro_station()
-        self.find_and_click_phone_number()
-        self.input_phone_number_in()
-        self.click_next_button()
+    @allure.step('Оформление заказа')
+    def checkout_process(self, button, name, surname, home_adress, phone_number):
+        self.accept_cookie()
+        self.driver.find_element(*button).click()
+        self.driver.find_element(*self.input_name).click()
+        self.driver.find_element(*self.input_name).send_keys(name)
+        self.driver.find_element(*self.input_surname).click()
+        self.driver.find_element(*self.input_surname).send_keys(surname)
+        self.driver.find_element(*self.input_address).click()
+        self.driver.find_element(*self.input_address).send_keys(home_adress)
+        self.driver.find_element(*self.choose_station_metro).click()
+        WebDriverWait(self.driver, 2).until(expected_conditions.visibility_of_element_located(self.station_metro))
+        self.driver.find_element(*self.station_metro).click()
+        self.driver.find_element(*self.input_phone_number).click()
+        self.driver.find_element(*self.input_phone_number).send_keys(phone_number)
+        self.driver.find_element(*self.next_button).click()
+        self.driver.find_element(*self.when_to_bring_scooter).click()
+        self.driver.find_element(*self.input_when_to_bring_scooter).click()
+        self.driver.find_element(*self.rental_period).click()
+        self.driver.find_element(*self.input_rental_period).click()
+        self.driver.find_element(*self.color_of_scooter).click()
+        self.driver.find_element(*self.order_button).click()
+        self.driver.find_element(*self.yes_button).click()
+        WebDriverWait(self.driver, 5).until(expected_conditions.visibility_of_element_located(self.order_processed))
 
-    @allure.step('Заполняем информация об аренде для заказа')
-    def process_rent_page(self):
-        self.find_and_click_when_to_bring_scooter()
-        self.choose_when_to_bring_scooter()
-        self.find_and_click_rental_period()
-        self.choose_rental_period()
-        self.choose_color_of_scooter()
-        self.click_order_button()
-        self.click_yes_button()
-        self.wait_to_proceed_modal()
