@@ -3,6 +3,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
+order_button_header = [By.CLASS_NAME, 'Button_Button__ra12g']
+order_button_not_header = [By.XPATH,
+                           "//div[contains(@class, 'Home_FinishButton')]//button[contains(text(),'Заказать')]"]
+
 
 class OrdersPage:
     driver = None
@@ -25,8 +29,6 @@ class OrdersPage:
     yes_button = [By.XPATH, "//div[contains(@class, 'Order_Buttons')]//button[contains(text(),'Да')]"]
     order_processed = [By.XPATH, "//div[contains(@class, 'Order_Modal')]"]
     order_processed_text = [By.XPATH, '/html/body/div/div/div[2]/div[5]/div[1]']
-    order_button_not_header = [By.XPATH,
-                               "//div[contains(@class, 'Home_FinishButton')]//button[contains(text(),'Заказать')]"]
     logo_yandex = [By.CLASS_NAME, 'Header_LogoYandex__3TSOI']
     logo_scooter = [By.CLASS_NAME, 'Header_LogoScooter__3lsAR']
     redirect_yandex_ru = 'https://dzen.ru/?yredirect=true'
@@ -63,24 +65,22 @@ class OrdersPage:
 
     @allure.step('Выбираем кнопку для офррмления заказа')
     def open(self, button):
-        self.accept_cookie()
         self.driver.find_element(*button).click()
 
     @allure.step('Оформление заказа')
-    def checkout_process(self, button, name, surname, home_adress, phone_number):
-        self.accept_cookie()
+    def checkout_process(self, button):
         self.driver.find_element(*button).click()
         self.driver.find_element(*self.input_name).click()
-        self.driver.find_element(*self.input_name).send_keys(name)
+        self.driver.find_element(*self.input_name).send_keys('Алина')
         self.driver.find_element(*self.input_surname).click()
-        self.driver.find_element(*self.input_surname).send_keys(surname)
+        self.driver.find_element(*self.input_surname).send_keys('Татьянчикова')
         self.driver.find_element(*self.input_address).click()
-        self.driver.find_element(*self.input_address).send_keys(home_adress)
+        self.driver.find_element(*self.input_address).send_keys('Ломоносовский проспект 33')
         self.driver.find_element(*self.choose_station_metro).click()
         WebDriverWait(self.driver, 2).until(expected_conditions.visibility_of_element_located(self.station_metro))
         self.driver.find_element(*self.station_metro).click()
         self.driver.find_element(*self.input_phone_number).click()
-        self.driver.find_element(*self.input_phone_number).send_keys(phone_number)
+        self.driver.find_element(*self.input_phone_number).send_keys('79137284647')
         self.driver.find_element(*self.next_button).click()
         self.driver.find_element(*self.when_to_bring_scooter).click()
         self.driver.find_element(*self.input_when_to_bring_scooter).click()
@@ -90,4 +90,3 @@ class OrdersPage:
         self.driver.find_element(*self.order_button).click()
         self.driver.find_element(*self.yes_button).click()
         WebDriverWait(self.driver, 5).until(expected_conditions.visibility_of_element_located(self.order_processed))
-

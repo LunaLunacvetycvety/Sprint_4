@@ -1,26 +1,20 @@
 import allure
 from selenium import webdriver
-from pages.orders_page import OrdersPage
+from pages.orders_page import OrdersPage, order_button_header, order_button_not_header
+import pytest
 
 
 class TestHeaderOrder:
     driver: webdriver
 
-    @allure.title('Проверяем правильно оформленный заказ через кнопку "Заказать" в хедере')
+    @pytest.mark.parametrize("button", [order_button_header, order_button_not_header])
+    @allure.title('Проверяем правильно оформленный заказ')
     @allure.description('Последовательные выполнения действий для заказа самоката')
-    def test_header_order(self, driver):
+    def test_header_order(self, driver, button):
         driver.get('https://qa-scooter.praktikum-services.ru/')
         order_page = OrdersPage(driver)
-        order_page.checkout_process(order_page.order_button_header, 'Алина', 'Татьянчикова', 'Ломоносовский проспект 33', '79137284647')
-
-        assert order_page.order_text_pattern == order_page.order_get_text()
-
-    @allure.title('Проверяем правильно оформленный заказ через кнопку "Заказать" в теле страницы')
-    @allure.description('Последовательные выполнения действий для заказа самоката')
-    def test_button_order(self, driver):
-        driver.get('https://qa-scooter.praktikum-services.ru/')
-        order_page = OrdersPage(driver)
-        order_page.checkout_process(order_page.order_button_not_header, 'Евгений', 'Татьянчиков', 'Ленинский проспект 44', '79036266152')
+        order_page.accept_cookie()
+        order_page.checkout_process(button)
 
         assert order_page.order_text_pattern == order_page.order_get_text()
 
