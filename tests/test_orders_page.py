@@ -2,6 +2,7 @@ import allure
 from selenium import webdriver
 from pages.orders_page import OrdersPage, order_button_header, order_button_not_header
 import pytest
+import re
 
 
 class TestHeaderOrder:
@@ -15,8 +16,10 @@ class TestHeaderOrder:
         order_page = OrdersPage(driver)
         order_page.accept_cookie()
         order_page.checkout_process(button)
+        text = order_page.order_get_text()
+        match = re.match(order_page.order_text_pattern, text)
 
-        assert order_page.order_text_pattern == order_page.order_get_text()
+        assert match is not None
 
     @allure.title('Проверяем что при нажатии на логотип Яндекса открывается редирект')
     @allure.description('Последовательные выполнения действий для проверки открытия главной страницы Яндекса')

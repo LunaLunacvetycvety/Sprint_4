@@ -2,6 +2,7 @@ import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
+import re
 
 order_button_header = [By.CLASS_NAME, 'Button_Button__ra12g']
 order_button_not_header = [By.XPATH,
@@ -28,12 +29,12 @@ class OrdersPage:
     order_button = [By.XPATH, "//div[contains(@class, 'Order_Buttons')]//button[contains(text(),'Заказать')]"]
     yes_button = [By.XPATH, "//div[contains(@class, 'Order_Buttons')]//button[contains(text(),'Да')]"]
     order_processed = [By.XPATH, "//div[contains(@class, 'Order_Modal')]"]
-    order_processed_text = [By.XPATH, '/html/body/div/div/div[2]/div[5]/div[1]']
+    order_processed_text = [By.CLASS_NAME, 'Order_ModalHeader__3FDaJ']
     logo_yandex = [By.CLASS_NAME, 'Header_LogoYandex__3TSOI']
     logo_scooter = [By.CLASS_NAME, 'Header_LogoScooter__3lsAR']
     redirect_yandex_ru = 'https://dzen.ru/?yredirect=true'
     dzen_content_div = [By.CLASS_NAME, 'content']
-    order_text_pattern = 'Заказ оформлен\nНомер заказа: .  Запишите его:\nпригодится, чтобы отслеживать статус'
+    order_text_pattern = re.compile("Заказ оформлен\nНомер заказа: \d?.  Запишите его:\nпригодится, чтобы отслеживать статус")
 
     def __init__(self, driver):
         self.driver = driver
@@ -77,7 +78,7 @@ class OrdersPage:
         self.driver.find_element(*self.input_address).click()
         self.driver.find_element(*self.input_address).send_keys('Ломоносовский проспект 33')
         self.driver.find_element(*self.choose_station_metro).click()
-        WebDriverWait(self.driver, 2).until(expected_conditions.visibility_of_element_located(self.station_metro))
+        WebDriverWait(self.driver, 5).until(expected_conditions.visibility_of_element_located(self.station_metro))
         self.driver.find_element(*self.station_metro).click()
         self.driver.find_element(*self.input_phone_number).click()
         self.driver.find_element(*self.input_phone_number).send_keys('79137284647')
