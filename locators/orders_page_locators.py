@@ -2,8 +2,6 @@ from selenium.webdriver.common.by import By
 
 
 class OrdersPageLocators:
-    # A class for order page locators. All order page locators should come here
-    pop_up_agreement_cookies = [By.ID, 'rcc-confirm-button']
     order_button = [By.XPATH, "//div[contains(@class, 'Order_Buttons')]//button[contains(text(),'Заказать')]"]
     start_order_button = [By.XPATH, "//div[contains(@class, 'Home_FinishButton')]//button[contains(text(),'Заказать')]"]
     start_order_button_header = [By.XPATH, "//div[contains(@class, 'Header_Nav')]//button[contains(text(),'Заказать')]"]
