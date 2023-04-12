@@ -15,16 +15,16 @@ class OrdersPage(BasePage):
         self.click_on_element(locators.start_order_button_header)
 
     @allure.step('Вводим имя')
-    def input_name_in(self):
-        self.input_value(locators.input_name, data.name)
+    def input_name_in(self, name):
+        self.input_value(locators.input_name, name)
 
     @allure.step('Вводим фамилию')
-    def input_surname_in(self):
-        self.input_value(locators.input_surname, data.surname)
+    def input_surname_in(self, surname):
+        self.input_value(locators.input_surname, surname)
 
     @allure.step('Вводим адрес')
-    def input_address_in(self):
-        self.input_value(locators.input_address, data.address)
+    def input_address_in(self, address):
+        self.input_value(locators.input_address, address)
 
     @allure.step('Нажимаем на выбор метро')
     def find_and_click_metro_station(self):
@@ -39,8 +39,8 @@ class OrdersPage(BasePage):
         self.click_on_element(locators.station_metro)
 
     @allure.step('Вводим номер телефона')
-    def input_phone_number_in(self):
-        self.input_value(locators.input_phone_number, data.phone_number)
+    def input_phone_number_in(self, phone_number):
+        self.input_value(locators.input_phone_number, phone_number)
 
     @allure.step('Нажимаем кнопку "Далее"')
     def click_next_button(self):

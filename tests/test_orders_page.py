@@ -1,10 +1,9 @@
 import re
-
 import allure
 import pytest
 from locators.orders_page_locators import OrdersPageLocators as locators
-from pages.orders_page import OrdersPage
 from locators.test_data import TestData as data
+from pages.orders_page import OrdersPage
 
 
 class TestHeaderOrder:
@@ -14,12 +13,12 @@ class TestHeaderOrder:
     def test_header_order(self, driver, order_button):
         orders_page = OrdersPage(driver)
         orders_page.choose_order_button(order_button)
-        orders_page.input_name_in()
-        orders_page.input_surname_in()
-        orders_page.input_address_in()
+        orders_page.input_name_in(data.name)
+        orders_page.input_surname_in(data.surname)
+        orders_page.input_address_in(data.address)
         orders_page.find_and_click_metro_station()
         orders_page.click_on_metro_station()
-        orders_page.input_phone_number_in()
+        orders_page.input_phone_number_in(data.phone_number)
         orders_page.click_next_button()
         orders_page.find_and_click_when_to_bring_scooter()
         orders_page.choose_when_to_bring_scooter()
